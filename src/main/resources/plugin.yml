@@ -1,0 +1,12 @@
+name: Lcc-mythicmobs-utilities
+version: '${project.version}'
+main: me.tick.lccmythicmobsutilities.LccMythicmobsUtilities
+api-version: 1.19
+prefix: LCC-MM
+authors: [ 0TickPulse ]
+description: Adds certain utility things to MythicMobs, built for LcorpCity.
+commands:
+  lccmm:
+    description: Main command for LCC MythicMobs Utilities.
+    usage: /lccmm <generateDocs>
+    aliases: [ lccmythicmobs, lccmythicmobsutilities, lccmythicmobsutil, lccmmu, lccmmutil ]
