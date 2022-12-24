@@ -110,11 +110,11 @@ public class SlashMechanic extends SkillMechanic implements ITargetedLocationSki
 
         this.getManager().queueSecondPass(() -> {
             this.onPointSkill = this.getManager().getSkill(this.onPointSkillName.get());
-            if (this.onPointSkill.isEmpty()) {
+            if (this.onPointSkill.isEmpty() && !this.onPointSkillName.get().equals("")) {
                 MythicLogger.error("Could not find onPointSkill " + this.onPointSkillName.get());
             }
             this.onHitSkill = this.getManager().getSkill(this.onHitSkillName.get());
-            if (this.onHitSkill.isEmpty()) {
+            if (this.onHitSkill.isEmpty() && !this.onHitSkillName.get().equals("")) {
                 MythicLogger.error("Could not find onHitSkill " + this.onHitSkillName.get());
             }
         });
