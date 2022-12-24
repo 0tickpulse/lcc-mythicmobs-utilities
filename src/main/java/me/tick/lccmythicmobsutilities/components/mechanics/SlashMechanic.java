@@ -25,14 +25,61 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@MechanicEntry(data = @MythicMechanic(name = "slash", author = "0Tick", description = "Performs a slash."), fields = {@MythicField(name = "onpointskill", aliases = {"onpoint", "op"}, description = "The skill to perform for every point in the slash."), @MythicField(name = "onhitskill", aliases = {"onhit", "oh"}, description = "The skill to perform when the slash ends."), @MythicField(name = "radius", aliases = {"r"}, description = "The radius of the slash.", defValue = "2"), @MythicField(name = "points", aliases = {"p"}, description = "The number of points in the slash.", defValue = "5"), @MythicField(name = "rotation", aliases = {"rot"}, description = "The rotation of the slash in degrees.", defValue = "0"), @MythicField(name = "arc", aliases = {"a"}, description = "The arc of the slash in degrees.", defValue = "180"), @MythicField(name = "interval", description = "The interval between each iteration in the slash.", aliases = {"i"}, defValue = "0"), @MythicField(name = "iterationCount", description = "The number of points each iteration will have.", aliases = {"count", "ic", "c"}, defValue = "1")}, examples = {"""
-        SlashTest:
-          Skills:
-          - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
-                                
-        SlashTestTick:
-          Skills:
-          - e:p{p=flame} @Origin"""})
+@MechanicEntry(
+        data = @MythicMechanic(
+                name = "slash",
+                author = "0Tick",
+                description = "Performs a slash."
+        ),
+        fields = {
+                @MythicField(
+                        name = "onpointskill",
+                        aliases = {"onpoint", "op"},
+                        description = "The skill to perform for every point in the slash."),
+                @MythicField(
+                        name = "onhitskill",
+                        aliases = {"onhit", "oh"},
+                        description = "The skill to perform when the slash ends."),
+                @MythicField(
+                        name = "radius",
+                        aliases = {"r"},
+                        description = "The radius of the slash.",
+                        defValue = "2"
+                ),
+                @MythicField(
+                        name = "points",
+                        aliases = {"p"},
+                        description = "The number of points in the slash.",
+                        defValue = "5"),
+                @MythicField(
+                        name = "rotation",
+                        aliases = {"rot"},
+                        description = "The rotation of the slash in degrees.",
+                        defValue = "0"),
+                @MythicField(
+                        name = "arc",
+                        aliases = {"a"},
+                        description = "The arc of the slash in degrees.",
+                        defValue = "180"),
+                @MythicField(
+                        name = "interval",
+                        description = "The interval between each iteration in the slash.",
+                        aliases = {"i"},
+                        defValue = "0"),
+                @MythicField(
+                        name = "iterationCount",
+                        description = "The number of points each iteration will have.",
+                        aliases = {"count", "ic", "c"},
+                        defValue = "1")
+        },
+        examples = {"""
+                SlashTest:
+                  Skills:
+                  - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
+                                        
+                SlashTestTick:
+                  Skills:
+                  - e:p{p=flame} @Origin"""})
 public class SlashMechanic extends SkillMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
 
     private final PlaceholderString onPointSkillName;
