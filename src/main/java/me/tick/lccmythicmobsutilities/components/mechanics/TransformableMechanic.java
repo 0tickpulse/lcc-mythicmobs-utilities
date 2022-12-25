@@ -12,7 +12,6 @@ import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
 import me.tick.lccmythicmobsutilities.modules.LocationUtil;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.io.File;
@@ -67,7 +66,7 @@ public abstract class TransformableMechanic extends SkillMechanic implements ITa
         float averageYaw = locations.stream().map(Location::getYaw).reduce(0.0F, Float::sum) / locations.size();
         float averagePitch = locations.stream().map(Location::getPitch).reduce(0.0F, Float::sum) / locations.size();
         Location center = new Location(locations.get(0).getWorld(), averageX, averageY, averageZ, averageYaw, averagePitch);
-        List<Location> result = locations.stream().map(location -> {
+        return locations.stream().map(location -> {
             location.add(xOffset, yOffset, zOffset);
             location = LocationUtil.relativeOffset(
                     location.clone().setDirection(
@@ -81,13 +80,6 @@ public abstract class TransformableMechanic extends SkillMechanic implements ITa
             Vector vector = location.clone().subtract(center).toVector();
             return center.clone().add(vector.multiply(size));
         }).toList();
-        if (skillMetadata.getCaster().getEntity().isPlayer()) {
-            result.forEach(location -> {
-                Player player = (Player) skillMetadata.getCaster().getEntity().getBukkitEntity();
-                player.sendMessage("Transformed location: " + location.toString());
-            });
-        }
-        return result;
     }
 
     public abstract List<Location> getPoints(SkillMetadata data, Location target);
