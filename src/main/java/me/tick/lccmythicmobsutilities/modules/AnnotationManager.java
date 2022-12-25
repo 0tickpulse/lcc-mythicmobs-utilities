@@ -15,7 +15,7 @@ public class AnnotationManager {
         return annotation;
     }
 
-    public void inheritAnnotations() {
+    public AnnotationManager inheritAnnotations() {
         for (Class<?> clazz : annotation.inherit()) {
             ComponentEntry inheritedAnnotation = clazz.getAnnotation(ComponentEntry.class);
             if (inheritedAnnotation == null) {
@@ -23,39 +23,41 @@ public class AnnotationManager {
             }
             this.setFields(inheritedAnnotation.fields());
         }
+        return this;
     }
 
-    public void setFields(MythicField[] fields) {
+    public AnnotationManager setFields(MythicField[] fields) {
         // set annotation's fields() to fields
+        ComponentEntry cur = annotation;
         this.annotation = new ComponentEntry() {
             @Override
             public ComponentType type() {
-                return annotation.type();
+                return cur.type();
             }
 
             @Override
             public String name() {
-                return annotation.name();
+                return cur.name();
             }
 
             @Override
             public String[] aliases() {
-                return annotation.aliases();
+                return cur.aliases();
             }
 
             @Override
             public String author() {
-                return annotation.author();
+                return cur.author();
             }
 
             @Override
             public String description() {
-                return annotation.description();
+                return cur.description();
             }
 
             @Override
             public String[] examples() {
-                return annotation.examples();
+                return cur.examples();
             }
 
             @Override
@@ -65,13 +67,14 @@ public class AnnotationManager {
 
             @Override
             public Class[] inherit() {
-                return annotation.inherit();
+                return cur.inherit();
             }
 
             @Override
             public Class<? extends java.lang.annotation.Annotation> annotationType() {
-                return annotation.annotationType();
+                return cur.annotationType();
             }
         };
+        return this;
     }
 }

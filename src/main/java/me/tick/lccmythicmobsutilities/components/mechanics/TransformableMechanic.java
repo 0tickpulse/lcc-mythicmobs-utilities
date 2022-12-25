@@ -10,6 +10,9 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
+import io.lumine.mythic.core.utils.annotations.MythicField;
+import me.tick.lccmythicmobsutilities.models.ComponentEntry;
+import me.tick.lccmythicmobsutilities.models.ComponentType;
 import me.tick.lccmythicmobsutilities.modules.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -39,6 +42,48 @@ import java.util.List;
  * @see LocationUtil
  * @see SkillMechanic
  */
+@ComponentEntry(
+        type = ComponentType.MECHANIC,
+        name = "transformable",
+        aliases = {"transformablemechanic"},
+        fields = {
+                @MythicField(
+                        name = "xoffset",
+                        description = "Additional offset in the X-axis.",
+                        defValue = "0"
+                ),
+                @MythicField(
+                        name = "yoffset",
+                        description = "Additional offset in the Y-axis.",
+                        defValue = "0"
+                ),
+                @MythicField(
+                        name = "zoffset",
+                        description = "Additional offset in the Z-axis.",
+                        defValue = "0"
+                ),
+                @MythicField(
+                        name = "forwardoffset",
+                        description = "Additional forward offset. This is based on the caster's yaw and pitch.",
+                        defValue = "0"
+                ),
+                @MythicField(
+                        name = "rightoffset",
+                        description = "Additional right offset. This is based on the caster's yaw and pitch. This is equivalent to `forwardoffset` but with pitch set to 0 and yaw rotated by -90.",
+                        defValue = "0"
+                ),
+                @MythicField(
+                        name = "upoffset",
+                        description = "Additional up offset. This is based on the caster's yaw and pitch. This is equivalent to `forwardoffset` but with pitch rotated by +90.",
+                        defValue = "0"
+                ),
+                @MythicField(
+                        name = "size",
+                        description = "This mechanic takes the points and calculates a center point. Then, for each of the points, it calculates a vector from the center to that point. The size field simply multiplies this vector.",
+                        defValue = "1"
+                )
+        }
+)
 public abstract class TransformableMechanic extends SkillMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
     private final double xOffset;
     private final double yOffset;
