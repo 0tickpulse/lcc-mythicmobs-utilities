@@ -26,7 +26,12 @@ import java.util.Set;
         type = ComponentType.MECHANIC,
         name = "slash",
         author = "0Tick",
-        description = "Performs a slash.",
+        description = """
+                Performs a slash. This slash is executed by calculating points along a circle.
+                This circle is calculated by fields like `points` and `radius`.
+                When used effectively, this mechanic can simulate a weapon's slash.
+                This mechanic also provides entity targeting and allows you to specify actions performed on targeted entities through the `onhitskill` field.
+                However, if you want more lenient targeting, you can use the `@EntitiesInCone` targeter provided by Mythic.""",
         inherit = {TransformableMechanic.class},
         fields = {
                 @MythicField(
