@@ -4,6 +4,9 @@ import io.lumine.mythic.core.utils.annotations.MythicField;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.models.ComponentType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnnotationManager {
     private ComponentEntry annotation;
 
@@ -21,7 +24,10 @@ public class AnnotationManager {
             if (inheritedAnnotation == null) {
                 continue;
             }
-            this.setFields(inheritedAnnotation.fields());
+            List<MythicField> fields = new ArrayList<>();
+            fields.addAll(List.of(inheritedAnnotation.fields()));
+            fields.addAll(List.of(annotation.fields()));
+            this.setFields(fields.toArray(MythicField[]::new));
         }
         return this;
     }

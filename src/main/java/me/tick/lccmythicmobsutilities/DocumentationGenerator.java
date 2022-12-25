@@ -56,8 +56,7 @@ public class DocumentationGenerator {
     public static String generateDocumentation(ComponentEntry clazz) {
         List<String> lines = new ArrayList<>();
         String sep = System.lineSeparator();
-        AnnotationManager manager = new AnnotationManager(clazz);
-        manager.inheritAnnotations();
+        AnnotationManager manager = new AnnotationManager(clazz).inheritAnnotations();
         ComponentEntry entry = manager.getAnnotation();
 
         // name
@@ -71,7 +70,7 @@ public class DocumentationGenerator {
         // author
         lines.add("Author: " + entry.author());
         // fields
-        lines.add("#### Fields:");
+        lines.add("#### Fields");
         for (MythicField field : entry.fields()) {
             lines.add("- `" + field.name() + "`: " + field.description());
             if (field.aliases().length > 0) {
@@ -82,7 +81,7 @@ public class DocumentationGenerator {
             }
         }
         // examples
-        lines.add("#### Examples:");
+        lines.add("#### Examples");
         for (String example : entry.examples()) {
             lines.add("```yaml" + sep + example + sep + "```");
         }
