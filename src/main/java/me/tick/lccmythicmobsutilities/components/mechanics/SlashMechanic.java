@@ -1,7 +1,5 @@
 package me.tick.lccmythicmobsutilities.components.mechanics;
 
-import io.lumine.mythic.api.adapters.AbstractEntity;
-import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.*;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
@@ -11,11 +9,10 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.utils.Schedulers;
 import io.lumine.mythic.core.logging.MythicLogger;
 import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicField;
-import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import me.tick.lccmythicmobsutilities.models.MechanicEntry;
-import me.tick.lccmythicmobsutilities.modules.Slash;
+import me.tick.lccmythicmobsutilities.models.ComponentEntry;
+import me.tick.lccmythicmobsutilities.models.ComponentType;
+import me.tick.lccmythicmobsutilities.modules.SlashGenerator;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -25,12 +22,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@MechanicEntry(
-        data = @MythicMechanic(
-                name = "slash",
-                author = "0Tick",
-                description = "Performs a slash."
-        ),
+@ComponentEntry(
+        type = ComponentType.MECHANIC,
+        name = "slash",
+        author = "0Tick",
+        description = "Performs a slash.",
+        inherit = {TransformableMechanic.class},
         fields = {
                 @MythicField(
                         name = "onpointskill",
@@ -70,7 +67,17 @@ import java.util.Set;
                         name = "iterationCount",
                         description = "The number of points each iteration will have.",
                         aliases = {"count", "ic", "c"},
-                        defValue = "1")
+                        defValue = "1"),
+                @MythicField(
+                        name = "lineDistance",
+                        description = "When slashing, sometimes the target entities are in between the caster and the points of the slash, causing the entity not to be hit. In order to circumvent this, the slash mechanic also takes points in between each slash point and checks for entities there. This is the distance between each line point. Set to 0 to disable.",
+                        aliases = {"ld"},
+                        defValue = "0.2"),
+                @MythicField(
+                        name = "pointRadius",
+                        description = "Each point in the slash checks for entities within a certain radius to determine if the entity was hit. This is the radius of each point.",
+                        aliases = {"pr"},
+                        defValue = "0.2")
         },
         examples = {"""
                 SlashTest:
@@ -80,7 +87,7 @@ import java.util.Set;
                 SlashTestTick:
                   Skills:
                   - e:p{p=flame} @Origin"""})
-public class SlashMechanic extends SkillMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
+public class SlashMechanic extends TransformableMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
 
     private final PlaceholderString onPointSkillName;
     private final PlaceholderString onHitSkillName;
@@ -90,6 +97,8 @@ public class SlashMechanic extends SkillMechanic implements ITargetedLocationSki
     private final PlaceholderDouble arc;
     private final PlaceholderInt iterationInterval;
     private final PlaceholderInt iterationCount;
+    private final PlaceholderDouble lineDistance;
+    private final PlaceholderDouble pointRadius;
     private Optional<Skill> onPointSkill;
     private Optional<Skill> onHitSkill;
 
@@ -108,6 +117,9 @@ public class SlashMechanic extends SkillMechanic implements ITargetedLocationSki
         this.iterationInterval = mlc.getPlaceholderInteger(new String[]{"interval", "i"}, "1");
         this.iterationCount = mlc.getPlaceholderInteger(new String[]{"iterationCount", "count", "ic", "c"}, "1");
 
+        this.lineDistance = mlc.getPlaceholderDouble(new String[]{"lineDistance", "ld"}, "0.2");
+        this.pointRadius = mlc.getPlaceholderDouble(new String[]{"pointRadius", "pr"}, "0.2");
+
         this.getManager().queueSecondPass(() -> {
             this.onPointSkill = this.getManager().getSkill(this.onPointSkillName.get());
             if (this.onPointSkill.isEmpty() && !this.onPointSkillName.get().equals("")) {
@@ -121,16 +133,20 @@ public class SlashMechanic extends SkillMechanic implements ITargetedLocationSki
     }
 
     @Override
-    public SkillResult castAtLocation(SkillMetadata skillMetadata, AbstractLocation abstractLocation) {
-        List<Location> points;
-        try {
-            points = Slash.getSlashLocations(BukkitAdapter.adapt(abstractLocation), this.radius.get(skillMetadata), this.rotation.get(skillMetadata), this.points.get(skillMetadata), this.arc.get(skillMetadata));
-        } catch (Exception e) {
-            MythicLogger.error("Could not get slash locations: " + e.getMessage());
-            return SkillResult.ERROR;
-        }
+    public List<Location> getPoints(SkillMetadata skillMetadata, Location target) {
+        return SlashGenerator.getSlashLocations(
+                BukkitAdapter.adapt(skillMetadata.getCaster().getLocation()),
+                this.radius.get(skillMetadata),
+                this.rotation.get(skillMetadata),
+                this.points.get(skillMetadata),
+                this.arc.get(skillMetadata)
+        );
+    }
+
+    @Override
+    public SkillResult cast(SkillMetadata skillMetadata, List<Location> locations) {
         int i = 0;
-        for (Location point : points) {
+        for (Location point : locations) {
             int interval = this.iterationInterval.get(skillMetadata);
             int count = this.iterationCount.get(skillMetadata);
             // get delay based on iteration count and interval
@@ -141,7 +157,7 @@ public class SlashMechanic extends SkillMechanic implements ITargetedLocationSki
             this.onPointSkill.ifPresent(skill -> Schedulers.sync().runLater(() -> skill.execute(pointData), delay));
             i++;
         }
-        Set<Entity> entities = Slash.getEntitiesInPoints(BukkitAdapter.adapt(skillMetadata.getCaster().getLocation()), new HashSet<>(points));
+        Set<Entity> entities = SlashGenerator.getEntitiesInPoints(BukkitAdapter.adapt(skillMetadata.getCaster().getLocation()), new HashSet<>(locations), this.pointRadius.get(), this.lineDistance.get());
         for (Entity entity : entities) {
             SkillMetadata hitData = skillMetadata.deepClone();
             hitData.setOrigin(BukkitAdapter.adapt(entity.getLocation()));
@@ -149,13 +165,5 @@ public class SlashMechanic extends SkillMechanic implements ITargetedLocationSki
             this.onHitSkill.ifPresent(skill -> skill.execute(hitData));
         }
         return SkillResult.SUCCESS;
-    }
-
-    @Override
-    public SkillResult castAtEntity(SkillMetadata skillMetadata, AbstractEntity abstractEntity) {
-        if (abstractEntity == null) {
-            return SkillResult.INVALID_TARGET;
-        }
-        return castAtLocation(skillMetadata, abstractEntity.getLocation());
     }
 }

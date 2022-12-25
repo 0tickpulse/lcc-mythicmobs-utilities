@@ -2,16 +2,17 @@ package me.tick.lccmythicmobsutilities.components.conditions;
 
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.skills.conditions.ILocationCondition;
-import io.lumine.mythic.core.utils.annotations.MythicCondition;
-import me.tick.lccmythicmobsutilities.models.ConditionEntry;
+import me.tick.lccmythicmobsutilities.models.ComponentEntry;
+import me.tick.lccmythicmobsutilities.models.ComponentType;
 
-@ConditionEntry(
-        data = @MythicCondition(
-                name = "worldguardflag",
-                description = "Checks if a WorldGuard flag is set at a location"
-        ),
+@ComponentEntry(
+        type = ComponentType.CONDITION,
+        name = "worldguardflag",
+        description = "Checks if a WorldGuard flag is set at a location",
         examples = {
-                "Conditions: \n- worldguardflag{flag=build}"
+                """
+                        Conditions:
+                        - worldguardflag{flag=build}"""
         }
 )
 public class WorldGuardFlagCondition implements ILocationCondition {

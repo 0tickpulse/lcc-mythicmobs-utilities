@@ -3,26 +3,22 @@ package me.tick.lccmythicmobsutilities.modules;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static java.lang.Math.sin;
-import static java.lang.Math.cos;
-import static java.lang.Math.toRadians;
+import static java.lang.Math.*;
 
-public class Slash {
-    public static Set<Entity> getEntitiesInPoints(Location casterLocation, Set<Location> locations) {
+public class SlashGenerator {
+    public static Set<Entity> getEntitiesInPoints(Location casterLocation, Set<Location> locations, double radius, double distance) {
         Set<Entity> entities = new HashSet<>();
         for (Location location : locations) {
-            Set<Location> pointsBetween = LocationUtil.getPointsBetween(location, casterLocation, 0.2);
+            Set<Location> pointsBetween = distance != 0 ? LocationUtil.getPointsBetween(location, casterLocation, distance) : new HashSet<>(Collections.singletonList(location));
             for (Location point : pointsBetween) {
-                entities.addAll(point.getWorld().getNearbyEntities(point, 0.2, 0.2, 0.2));
+                entities.addAll(point.getWorld().getNearbyEntities(point, radius, radius, radius));
             }
         }
         return entities;
     }
+
     public static List<Location> getSlashLocations(Location origin, double radius, double rotation, int points, double arc) throws IllegalArgumentException {
 
         if (points < 0) {

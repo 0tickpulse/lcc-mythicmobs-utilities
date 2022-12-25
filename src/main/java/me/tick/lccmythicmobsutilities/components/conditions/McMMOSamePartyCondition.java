@@ -6,18 +6,17 @@ import com.gmail.nossr50.util.player.UserManager;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.conditions.ISkillMetaCondition;
-import io.lumine.mythic.core.utils.annotations.MythicCondition;
-import me.tick.lccmythicmobsutilities.models.ConditionEntry;
+import me.tick.lccmythicmobsutilities.models.ComponentEntry;
+import me.tick.lccmythicmobsutilities.models.ComponentType;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Collection;
 
-@ConditionEntry(
-        data = @MythicCondition(
-                name = "sameparty",
-                aliases = {"mcmmosameparty"},
-                description = "Checks if the target is in the same party as the caster. Only works for players."
-        ),
+@ComponentEntry(
+        type = ComponentType.CONDITION,
+        name = "sameparty",
+        aliases = {"mcmmosameparty"},
+        description = "Checks if the target is in the same party as the caster. Only works for players.",
         examples = {
                 """
                         Conditions:

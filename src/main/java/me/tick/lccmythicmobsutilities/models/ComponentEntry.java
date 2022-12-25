@@ -1,15 +1,25 @@
 package me.tick.lccmythicmobsutilities.models;
 
 import io.lumine.mythic.core.utils.annotations.MythicField;
-import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MechanicEntry {
-    MythicMechanic data();
-    String[] examples() default {};
-    MythicField[] fields() default {};
-}
+public @interface ComponentEntry {
+    ComponentType type();
 
+    String name() default "";
+
+    String[] aliases() default {};
+
+    String author() default "";
+
+    String description() default "";
+
+    String[] examples() default {};
+
+    MythicField[] fields() default {};
+
+    Class[] inherit() default {};
+}

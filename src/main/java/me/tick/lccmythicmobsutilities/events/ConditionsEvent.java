@@ -4,7 +4,7 @@ import io.lumine.mythic.api.skills.conditions.ISkillCondition;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
 import me.tick.lccmythicmobsutilities.components.conditions.McMMOSamePartyCondition;
-import me.tick.lccmythicmobsutilities.models.ConditionEntry;
+import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -21,15 +21,15 @@ public class ConditionsEvent implements Listener {
     }
 
     public static void registerCondition(ISkillCondition condition, MythicConditionLoadEvent event) {
-        ConditionEntry annotation = condition.getClass().getAnnotation(ConditionEntry.class);
+        ComponentEntry annotation = condition.getClass().getAnnotation(ComponentEntry.class);
         if (annotation == null) {
             throw new Error("ConditionEntry annotation is missing from " + condition.getClass().getName());
         }
         LccMythicmobsUtilities.getPlugin().getLogger().info("Registering condition " + condition.getClass().getName());
         conditions.add(condition.getClass());
         List<String> names = new ArrayList<>();
-        names.add(annotation.data().name());
-        names.addAll(Arrays.asList(annotation.data().aliases()));
+        names.add(annotation.name());
+        names.addAll(Arrays.asList(annotation.aliases()));
         if (names.stream().map(String::toLowerCase).toList().contains(event.getConditionName().toLowerCase())) {
             event.register(condition);
         }
