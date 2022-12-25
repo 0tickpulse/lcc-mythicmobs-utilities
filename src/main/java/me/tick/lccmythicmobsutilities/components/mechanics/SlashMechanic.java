@@ -135,7 +135,7 @@ public class SlashMechanic extends TransformableMechanic implements ITargetedLoc
     @Override
     public List<Location> getPoints(SkillMetadata skillMetadata, Location target) {
         return SlashGenerator.getSlashLocations(
-                BukkitAdapter.adapt(skillMetadata.getCaster().getLocation()),
+                target,
                 this.radius.get(skillMetadata),
                 this.rotation.get(skillMetadata),
                 this.points.get(skillMetadata),
