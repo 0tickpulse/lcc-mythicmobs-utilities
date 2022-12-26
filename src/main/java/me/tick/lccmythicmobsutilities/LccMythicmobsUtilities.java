@@ -4,17 +4,25 @@ import me.tick.lccmythicmobsutilities.commands.LccmmCommand;
 import me.tick.lccmythicmobsutilities.events.ConditionsEvent;
 import me.tick.lccmythicmobsutilities.events.MechanicsEvent;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class LccMythicmobsUtilities extends JavaPlugin {
 
-    public static Plugin getPlugin() {
+    static final boolean debug = true;
+
+    public static LccMythicmobsUtilities getPlugin() {
         return getPlugin(LccMythicmobsUtilities.class);
+    }
+
+    public static void devLog(String message) {
+        if (debug) {
+            getPlugin().getLogger().log(Level.INFO, message);
+        }
     }
 
     @Override

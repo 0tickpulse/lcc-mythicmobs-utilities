@@ -25,11 +25,11 @@ public class ConditionsEvent implements Listener {
         if (annotation == null) {
             throw new Error("ConditionEntry annotation is missing from " + condition.getClass().getName());
         }
-        LccMythicmobsUtilities.getPlugin().getLogger().info("Registering condition " + condition.getClass().getName());
         conditions.add(condition.getClass());
         List<String> names = new ArrayList<>();
         names.add(annotation.name());
         names.addAll(Arrays.asList(annotation.aliases()));
+        LccMythicmobsUtilities.getPlugin().getLogger().info("Registering condition " + condition.getClass().getName() + " with names " + names);
         if (names.stream().map(String::toLowerCase).toList().contains(event.getConditionName().toLowerCase())) {
             event.register(condition);
         }

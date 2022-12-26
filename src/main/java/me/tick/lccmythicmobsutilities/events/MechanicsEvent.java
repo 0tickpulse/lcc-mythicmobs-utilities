@@ -5,6 +5,7 @@ import io.lumine.mythic.api.skills.ISkillMechanic;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
+import me.tick.lccmythicmobsutilities.components.mechanics.MessageMechanic;
 import me.tick.lccmythicmobsutilities.components.mechanics.SlashMechanic;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import org.bukkit.event.EventHandler;
@@ -22,7 +23,12 @@ public class MechanicsEvent implements Listener {
         File file = event.getContainer().getFile();
         String line = event.getConfig().getLine();
         MythicLineConfig mlc = event.getConfig();
-        registerMechanic(new SlashMechanic(executor, file, line, mlc), event);
+        try {
+            registerMechanic(new SlashMechanic(executor, file, line, mlc), event);
+            registerMechanic(new MessageMechanic(executor, file, line, mlc), event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void registerMechanic(ISkillMechanic mechanic, MythicMechanicLoadEvent event) {
@@ -30,11 +36,11 @@ public class MechanicsEvent implements Listener {
         if (annotation == null) {
             throw new Error("MechanicEntry annotation is missing from " + mechanic.getClass().getName());
         }
-        LccMythicmobsUtilities.getPlugin().getLogger().info("Registering mechanic " + mechanic.getClass().getName());
         mechanics.add(mechanic.getClass());
         List<String> names = new ArrayList<>();
         names.add(annotation.name());
         names.addAll(Arrays.asList(annotation.aliases()));
+        LccMythicmobsUtilities.getPlugin().getLogger().info("Registering mechanic " + mechanic.getClass().getName() + " with names " + names);
         if (names.stream().map(String::toLowerCase).toList().contains(event.getMechanicName().toLowerCase())) {
             event.register(mechanic);
         }
