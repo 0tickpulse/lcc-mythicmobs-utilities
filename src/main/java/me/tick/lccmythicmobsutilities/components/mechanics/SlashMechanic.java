@@ -37,11 +37,13 @@ import java.util.Set;
                 @MythicField(
                         name = "onpointskill",
                         aliases = {"onpoint", "op"},
-                        description = "The skill to perform for every point in the slash."),
+                        description = "The skill to perform for every point in the slash."
+                ),
                 @MythicField(
                         name = "onhitskill",
                         aliases = {"onhit", "oh"},
-                        description = "The skill to perform when the slash ends."),
+                        description = "The skill to perform when the slash ends."
+                ),
                 @MythicField(
                         name = "radius",
                         aliases = {"r"},
@@ -52,37 +54,44 @@ import java.util.Set;
                         name = "points",
                         aliases = {"p"},
                         description = "The number of points in the slash.",
-                        defValue = "5"),
-                @MythicField(
-                        name = "rotation",
-                        aliases = {"rot"},
-                        description = "The rotation of the slash in degrees.",
-                        defValue = "0"),
+                        defValue = "5"
+                ),
                 @MythicField(
                         name = "arc",
                         aliases = {"a"},
                         description = "The arc of the slash in degrees.",
-                        defValue = "180"),
+                        defValue = "180"
+                ),
                 @MythicField(
                         name = "interval",
                         description = "The interval between each iteration in the slash.",
                         aliases = {"i"},
-                        defValue = "0"),
+                        defValue = "0"
+                ),
                 @MythicField(
                         name = "iterationCount",
                         description = "The number of points each iteration will have.",
                         aliases = {"count", "ic", "c"},
-                        defValue = "1"),
+                        defValue = "1"
+                ),
                 @MythicField(
                         name = "lineDistance",
                         description = "When slashing, sometimes the target entities are in between the caster and the points of the slash, causing the entity not to be hit. In order to circumvent this, the slash mechanic also takes points in between each slash point and checks for entities there. This is the distance between each line point. Set to 0 to disable.",
                         aliases = {"ld"},
-                        defValue = "0.2"),
+                        defValue = "0.2"
+                ),
                 @MythicField(
-                        name = "pointRadius",
-                        description = "Each point in the slash checks for entities within a certain radius to determine if the entity was hit. This is the radius of each point.",
-                        aliases = {"pr"},
-                        defValue = "0.2")
+                        name = "hitRadius",
+                        description = "Each point in the slash checks for entities within a certain radius to determine if the entity was hit. This is the horizontal radius of each point.",
+                        aliases = {"hr"},
+                        defValue = "0.2"
+                ),
+                @MythicField(
+                        name = "verticalHitRadius",
+                        description = "Each point in the slash checks for entities within a certain radius to determine if the entity was hit. This is the vertical radius of each point.",
+                        aliases = {"vhr", "vr"},
+                        defValue = "(The hitRadius field)"
+                ),
         },
         examples = {"""
                 SlashTest:
@@ -98,12 +107,12 @@ public class SlashMechanic extends TransformableMechanic implements ITargetedLoc
     private final PlaceholderString onHitSkillName;
     private final PlaceholderDouble radius;
     private final PlaceholderInt points;
-    private final PlaceholderDouble rotation;
     private final PlaceholderDouble arc;
     private final PlaceholderInt iterationInterval;
     private final PlaceholderInt iterationCount;
     private final PlaceholderDouble lineDistance;
-    private final PlaceholderDouble pointRadius;
+    private final PlaceholderDouble hitRadius;
+    private final PlaceholderDouble verticalHitRadius;
     private Optional<Skill> onPointSkill;
     private Optional<Skill> onHitSkill;
 
@@ -116,14 +125,14 @@ public class SlashMechanic extends TransformableMechanic implements ITargetedLoc
         this.radius = mlc.getPlaceholderDouble(new String[]{"radius", "r"}, "2");
         this.points = mlc.getPlaceholderInteger(new String[]{"points", "p"}, "5");
 
-        this.rotation = mlc.getPlaceholderDouble(new String[]{"rotation", "rot"}, "0");
         this.arc = mlc.getPlaceholderDouble(new String[]{"arc", "a"}, "180");
 
         this.iterationInterval = mlc.getPlaceholderInteger(new String[]{"interval", "i"}, "1");
         this.iterationCount = mlc.getPlaceholderInteger(new String[]{"iterationCount", "count", "ic", "c"}, "1");
 
         this.lineDistance = mlc.getPlaceholderDouble(new String[]{"lineDistance", "ld"}, "0.2");
-        this.pointRadius = mlc.getPlaceholderDouble(new String[]{"pointRadius", "pr"}, "0.2");
+        this.hitRadius = mlc.getPlaceholderDouble(new String[]{"hitRadius", "hr"}, "0.2");
+        this.verticalHitRadius = mlc.getPlaceholderDouble(new String[]{"verticalHitRadius", "vhr", "vr"}, this.hitRadius);
 
         this.getManager().queueSecondPass(() -> {
             this.onPointSkill = this.getManager().getSkill(this.onPointSkillName.get());
@@ -162,7 +171,7 @@ public class SlashMechanic extends TransformableMechanic implements ITargetedLoc
             this.onPointSkill.ifPresent(skill -> Schedulers.sync().runLater(() -> skill.execute(pointData), delay));
             i++;
         }
-        Set<Entity> entities = SlashGenerator.getEntitiesInPoints(BukkitAdapter.adapt(skillMetadata.getCaster().getLocation()), new HashSet<>(locations), this.pointRadius.get(), this.lineDistance.get());
+        Set<Entity> entities = SlashGenerator.getEntitiesInPoints(BukkitAdapter.adapt(skillMetadata.getCaster().getLocation()), new HashSet<>(locations), this.hitRadius.get(), this.verticalHitRadius.get(), this.lineDistance.get());
         for (Entity entity : entities) {
             SkillMetadata hitData = skillMetadata.deepClone();
             hitData.setOrigin(BukkitAdapter.adapt(entity.getLocation()));

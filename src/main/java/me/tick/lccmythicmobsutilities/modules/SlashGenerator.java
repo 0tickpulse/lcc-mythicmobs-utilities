@@ -8,12 +8,12 @@ import java.util.*;
 import static java.lang.Math.*;
 
 public class SlashGenerator {
-    public static Set<Entity> getEntitiesInPoints(Location casterLocation, Set<Location> locations, double radius, double distance) {
+    public static Set<Entity> getEntitiesInPoints(Location casterLocation, Set<Location> locations, double radius, double verticalRadius, double distance) {
         Set<Entity> entities = new HashSet<>();
         for (Location location : locations) {
             Set<Location> pointsBetween = distance != 0 ? LocationUtil.getPointsBetween(location, casterLocation, distance) : new HashSet<>(Collections.singletonList(location));
             for (Location point : pointsBetween) {
-                entities.addAll(point.getWorld().getNearbyEntities(point, radius, radius, radius));
+                entities.addAll(point.getWorld().getNearbyEntities(point, radius, verticalRadius, radius));
             }
         }
         return entities;
