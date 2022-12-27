@@ -5,6 +5,9 @@ api-version: 1.19
 prefix: LCC-MM
 authors: [ 0TickPulse ]
 description: Adds certain utility things to MythicMobs, built for LcorpCity.
+depend:
+  - MythicMobs
+  - McMMO
 commands:
   lccmm:
     description: Main command for LCC MythicMobs Utilities.

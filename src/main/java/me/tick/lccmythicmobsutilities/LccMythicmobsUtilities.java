@@ -44,6 +44,7 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
         getLogger().info("LccMythicmobsUtilities has been enabled!");
         registerEvents();
         registerCommands();
+        PlaceholderRegisterer.register();
     }
 
     public static Set<ComponentEntry> getComponentAnnotations() {

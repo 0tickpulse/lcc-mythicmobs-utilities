@@ -13,6 +13,9 @@ public class PlaceholderRegisterer implements Listener {
     @EventHandler
     public void onMythicReloaded(MythicReloadedEvent event) {
         PlaceholderManager.placeholderDataAnnotations = new LinkedHashSet<>();
+    }
+
+    public static void register() {
         new EntityPlaceholders().register();
         new MetaPlaceholders().register();
     }
