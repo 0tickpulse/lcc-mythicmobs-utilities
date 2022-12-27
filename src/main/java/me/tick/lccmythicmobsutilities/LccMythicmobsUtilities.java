@@ -29,7 +29,6 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
     public static void error(Throwable message) {
         getPlugin().getLogger().log(Level.SEVERE, message.toString());
     }
-
     public static void error(String message) {
         getPlugin().getLogger().log(Level.SEVERE, message);
     }
