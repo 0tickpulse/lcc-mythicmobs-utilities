@@ -21,7 +21,8 @@ import java.util.Collection;
                 """
                         Conditions:
                         - sameparty"""
-        }
+        },
+        author = "0TickPulse"
 )
 public class McMMOSamePartyCondition implements ISkillMetaCondition {
     public static boolean matchesParty(OfflinePlayer player1, OfflinePlayer player2) {

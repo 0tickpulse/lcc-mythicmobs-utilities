@@ -8,5 +8,5 @@ description: Adds certain utility things to MythicMobs, built for LcorpCity.
 commands:
   lccmm:
     description: Main command for LCC MythicMobs Utilities.
-    usage: /lccmm <generateDocs>
+    usage: /lccmm <generateDataAnnotation>
     aliases: [ lccmythicmobs, lccmythicmobsutilities, lccmythicmobsutil, lccmmu, lccmmutil ]

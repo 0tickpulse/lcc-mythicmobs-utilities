@@ -15,8 +15,8 @@ import java.io.File;
 import java.util.*;
 
 public class MechanicsEvent implements Listener {
-    public static Set<MechanicGenerator> mechanics = new HashSet<>();
-    public static Set<Class<? extends SkillMechanic>> legacyMechanics = new HashSet<>();
+    public static Set<MechanicGenerator> mechanics = new LinkedHashSet<>();
+    public static Set<Class<? extends SkillMechanic>> legacyMechanics = new LinkedHashSet<>();
 
     static {
         //mechanics.add(new MechanicGenerator(new MessageMechanic()));

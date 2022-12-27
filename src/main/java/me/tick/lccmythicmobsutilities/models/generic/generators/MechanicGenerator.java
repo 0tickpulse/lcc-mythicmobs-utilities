@@ -14,12 +14,14 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
+import io.lumine.mythic.core.utils.annotations.MythicField;
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
 import me.tick.lccmythicmobsutilities.models.generic.GenericMechanic;
 import me.tick.lccmythicmobsutilities.models.generic.Targeted;
 import me.tick.lccmythicmobsutilities.models.generic.fields.*;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -92,6 +94,44 @@ public class MechanicGenerator {
             this.placeholderGetter = placeholderGetter;
             return this;
         }
+
+        public MythicField generateDataAnnotation() {
+            return new MythicField() {
+                @Override
+                public Class<? extends Annotation> annotationType() {
+                    return MythicField.class;
+                }
+
+                @Override
+                public String name() {
+                    return names[0];
+                }
+
+                @Override
+                public String[] aliases() {
+                    return Arrays.copyOfRange(names, 1, names.length);
+                }
+
+                @Override
+                public String description() {
+                    return description;
+                }
+
+                @Override
+                public String version() {
+                    return null;
+                }
+
+                public String defValue() {
+                    return defaultValue.toString();
+                }
+
+                @Override
+                public boolean premium() {
+                    return false;
+                }
+            };
+        }
     }
 
     public List<FieldData<?>> fields = new ArrayList<>();
@@ -103,7 +143,7 @@ public class MechanicGenerator {
     public MechanicGenerator(GenericMechanic instance) {
         this.clazz = instance.getClass();
         this.instance = instance;
-        generateArgs();
+        generateFields();
     }
 
     private Method getSmartExecuteMethod() {
@@ -122,7 +162,7 @@ public class MechanicGenerator {
         return null;
     }
 
-    private void generateArgs() {
+    private void generateFields() {
         Method method = getSmartExecuteMethod();
         if (method == null) {
             LccMythicmobsUtilities.error("Could not find execute method for " + clazz.getName());
@@ -172,7 +212,7 @@ public class MechanicGenerator {
         File file = event.getContainer().getFile();
         String line = event.getConfig().getLine();
         MythicLineConfig mlc = event.getConfig();
-        if (Arrays.stream(instance.names).toList().contains(event.getMechanicName())) {
+        if (Arrays.stream(instance.getNames()).toList().contains(event.getMechanicName())) {
             event.register(generate(executor, file, line, mlc));
         }
     }

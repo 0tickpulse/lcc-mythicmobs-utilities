@@ -85,5 +85,10 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/MythicMobs.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-jexl3</artifactId>
+            <version>3.2.1</version>
+        </dependency>
     </dependencies>
 </project>

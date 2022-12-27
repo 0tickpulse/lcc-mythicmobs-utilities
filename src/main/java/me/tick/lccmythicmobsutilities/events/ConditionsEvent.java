@@ -12,7 +12,7 @@ import java.util.*;
 
 public class ConditionsEvent implements Listener {
 
-    public static Set<Class<? extends ISkillCondition>> conditions = new HashSet<>();
+    public static Set<Class<? extends ISkillCondition>> conditions = new LinkedHashSet<>();
 
     @EventHandler
     public void onConditionsLoad(MythicConditionLoadEvent event) {

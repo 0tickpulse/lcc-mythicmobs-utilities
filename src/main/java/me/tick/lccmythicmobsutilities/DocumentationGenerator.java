@@ -3,7 +3,7 @@ package me.tick.lccmythicmobsutilities;
 import io.lumine.mythic.core.utils.annotations.MythicField;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.models.ComponentType;
-import me.tick.lccmythicmobsutilities.modules.AnnotationManager;
+import me.tick.lccmythicmobsutilities.modules.ComponentEntryGenerator;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,12 +33,15 @@ public class DocumentationGenerator {
     public static String generate() {
         List<ComponentEntry> conditions = new ArrayList<>();
         List<ComponentEntry> mechanics = new ArrayList<>();
+        List<ComponentEntry> placeholders = new ArrayList<>();
         // get all conditions and mechanics
         for (ComponentEntry entry : LccMythicmobsUtilities.getComponentAnnotations()) {
             if (entry.type() == ComponentType.CONDITION) {
                 conditions.add(entry);
             } else if (entry.type() == ComponentType.MECHANIC) {
                 mechanics.add(entry);
+            } else if (entry.type() == ComponentType.PLACEHOLDER) {
+                placeholders.add(entry);
             }
         }
         String sep = System.lineSeparator() + System.lineSeparator();
@@ -50,40 +53,52 @@ public class DocumentationGenerator {
                 + sep
                 + "## Mechanics"
                 + sep
-                + String.join(sep, mechanics.stream().map(DocumentationGenerator::generateDocumentation).toList());
+                + String.join(sep, mechanics.stream().map(DocumentationGenerator::generateDocumentation).toList())
+                + sep
+                + "## Placeholders"
+                + sep
+                + String.join(sep, placeholders.stream().map(DocumentationGenerator::generateDocumentation).toList());
     }
 
     public static String generateDocumentation(ComponentEntry clazz) {
         List<String> lines = new ArrayList<>();
         String sep = System.lineSeparator();
-        AnnotationManager manager = new AnnotationManager(clazz).inheritAnnotations();
-        ComponentEntry entry = manager.getAnnotation();
+        ComponentEntryGenerator manager = new ComponentEntryGenerator(clazz).inheritAnnotations();
+        ComponentEntry entry = manager.generate();
 
         // name
         if (clazz.type() == ComponentType.CONDITION) {
             lines.add("### Condition: `" + entry.name() + "`");
         } else if (clazz.type() == ComponentType.MECHANIC) {
             lines.add("### Mechanic: `" + entry.name() + "`");
+        } else if (clazz.type() == ComponentType.PLACEHOLDER) {
+            lines.add("### Placeholder: `" + entry.name() + "`");
+        } else {
+            lines.add("### Unknown: `" + entry.name() + "`");
         }
         // description
         lines.add(entry.description());
         // author
         lines.add("Author: " + entry.author());
         // fields
-        lines.add("#### Fields");
-        for (MythicField field : entry.fields()) {
-            lines.add("- `" + field.name() + "`: " + field.description());
-            if (field.aliases().length > 0) {
-                lines.add("  Aliases: " + String.join(", ", Arrays.stream(field.aliases()).map(alias -> "`" + alias + "`").toArray(String[]::new)));
-            }
-            if (field.defValue().length() > 0) {
-                lines.add("  Default: `" + field.defValue() + "`");
+        if (entry.fields().length > 0) {
+            lines.add("#### Fields");
+            for (MythicField field : entry.fields()) {
+                lines.add("- `" + field.name() + "`: " + field.description());
+                if (field.aliases().length > 0) {
+                    lines.add("  Aliases: " + String.join(", ", Arrays.stream(field.aliases()).map(alias -> "`" + alias + "`").toArray(String[]::new)));
+                }
+                if (field.defValue().length() > 0) {
+                    lines.add("  Default: `" + field.defValue() + "`");
+                }
             }
         }
         // examples
-        lines.add("#### Examples");
-        for (String example : entry.examples()) {
-            lines.add("```yaml" + sep + example + sep + "```");
+        if (entry.examples().length > 0) {
+            lines.add("#### Examples");
+            for (String example : entry.examples()) {
+                lines.add("```yaml" + sep + example + sep + "```");
+            }
         }
         return String.join(sep + sep, lines);
     }
