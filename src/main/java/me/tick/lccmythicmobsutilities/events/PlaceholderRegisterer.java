@@ -12,10 +12,11 @@ import java.util.LinkedHashSet;
 public class PlaceholderRegisterer implements Listener {
     @EventHandler
     public void onMythicReloaded(MythicReloadedEvent event) {
-        PlaceholderManager.placeholderDataAnnotations = new LinkedHashSet<>();
+        register();
     }
 
     public static void register() {
+        PlaceholderManager.placeholderDataAnnotations = new LinkedHashSet<>();
         new EntityPlaceholders().register();
         new MetaPlaceholders().register();
     }
