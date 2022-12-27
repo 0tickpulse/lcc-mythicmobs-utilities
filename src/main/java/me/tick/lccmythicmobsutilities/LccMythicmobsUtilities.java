@@ -76,11 +76,15 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
     }
 
     public void registerCommands() {
-        registerCommand("lccmm", new LccmmCommand(), new LccmmCommand());
+        registerCommandWithTabComplete("lccmm", new LccmmCommand());
     }
 
     public void registerCommand(String name, CommandExecutor executor) {
         registerCommand(name, executor, null);
+    }
+
+    public <T extends CommandExecutor & TabCompleter> void registerCommandWithTabComplete(String name, T executor) {
+        registerCommand(name, executor, executor);
     }
 
     public void registerCommand(String name, CommandExecutor executor, TabCompleter tabCompleter) {
