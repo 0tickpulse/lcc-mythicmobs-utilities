@@ -1,9 +1,11 @@
 package me.tick.lccmythicmobsutilities;
 
+import me.tick.lccmythicmobsutilities.bridges.McMMOBridge;
 import me.tick.lccmythicmobsutilities.commands.LccmmCommand;
 import me.tick.lccmythicmobsutilities.events.ConditionsEvent;
 import me.tick.lccmythicmobsutilities.events.MechanicsEvent;
 import me.tick.lccmythicmobsutilities.events.PlaceholderRegisterer;
+import me.tick.lccmythicmobsutilities.models.Bridge;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.modules.PlaceholderManager;
 import org.bukkit.command.CommandExecutor;
@@ -44,7 +46,12 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
         getLogger().info("LccMythicmobsUtilities has been enabled!");
         registerEvents();
         registerCommands();
+        registerBridges();
         PlaceholderRegisterer.register();
+    }
+
+    public boolean hasPlugin(String pluginName) {
+        return getServer().getPluginManager().getPlugin(pluginName) != null;
     }
 
     public static Set<ComponentEntry> getComponentAnnotations() {
@@ -84,6 +91,16 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
         cmd.setExecutor(executor);
         if (tabCompleter != null) {
             cmd.setTabCompleter(tabCompleter);
+        }
+    }
+
+    public void registerBridges() {
+        registerBridge(new McMMOBridge());
+    }
+
+    public void registerBridge(Bridge bridge) {
+        if (bridge.canEnable()) {
+            bridge.start();
         }
     }
 

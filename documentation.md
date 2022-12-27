@@ -2,6 +2,20 @@
 
 ## Conditions
 
+### Condition: `canattack`
+
+Checks if an entity can attack another entity. It's done by simulating a damage event.
+
+Author: 0TickPulse
+
+#### Fields
+
+- `cause`: The cause of the damage event. Defaults to CUSTOM.
+
+  Aliases: `damagecause`, `c`
+
+  Default: `CUSTOM`
+
 ### Condition: `sameparty`
 
 Checks if the target is in the same party as the caster. Only works for players.
@@ -14,12 +28,6 @@ Author: 0TickPulse
 Conditions:
 - sameparty
 ```
-
-### Condition: `canattack`
-
-Checks if an entity can attack another entity
-
-Author: 0TickPulse
 
 ## Mechanics
 
@@ -148,20 +156,14 @@ Author: 0TickPulse
 ```yaml
 SlashTest:
   Skills:
-    - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
+  - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
 
 SlashTestTick:
   Skills:
-    - e:p{p=flame} @Origin
+  - e:p{p=flame} @Origin
 ```
 
 ## Placeholders
-
-### Placeholder: `jexl.<expression>`
-
-Parses a [JEXL](https://commons.apache.org/proper/commons-jexl/) expression and returns the result.
-
-Author: 0TickPulse
 
 ### Placeholder: `[caster|target|trigger|parent].mcmmo.party`
 
@@ -172,5 +174,11 @@ Author: 0TickPulse
 ### Placeholder: `[caster|target|trigger|parent].standing_on`
 
 Returns the block type that the entity is standing on.
+
+Author: 0TickPulse
+
+### Placeholder: `jexl.<expression>`
+
+Parses a [JEXL](https://commons.apache.org/proper/commons-jexl/) expression and returns the result.
 
 Author: 0TickPulse

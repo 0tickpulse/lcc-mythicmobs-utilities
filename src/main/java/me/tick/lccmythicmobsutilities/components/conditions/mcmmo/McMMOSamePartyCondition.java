@@ -1,14 +1,15 @@
-package me.tick.lccmythicmobsutilities.components.conditions;
+package me.tick.lccmythicmobsutilities.components.conditions.mcmmo;
 
 import com.gmail.nossr50.datatypes.party.Party;
 import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.util.player.UserManager;
 import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.conditions.ISkillMetaCondition;
-import io.lumine.mythic.core.skills.SkillCondition;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.models.ComponentType;
+import me.tick.lccmythicmobsutilities.models.CustomMythicCondition;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Collection;
@@ -25,9 +26,9 @@ import java.util.Collection;
         },
         author = "0TickPulse"
 )
-public class McMMOSamePartyCondition extends SkillCondition implements ISkillMetaCondition {
-    public McMMOSamePartyCondition(String line) {
-        super(line);
+public class McMMOSamePartyCondition extends CustomMythicCondition implements ISkillMetaCondition {
+    public McMMOSamePartyCondition(MythicLineConfig mlc) {
+        super(mlc);
     }
 
     public static boolean matchesParty(OfflinePlayer player1, OfflinePlayer player2) {

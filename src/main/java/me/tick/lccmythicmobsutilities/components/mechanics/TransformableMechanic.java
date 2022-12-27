@@ -14,6 +14,7 @@ import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicField;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.models.ComponentType;
+import me.tick.lccmythicmobsutilities.models.CustomMythicMechanic;
 import me.tick.lccmythicmobsutilities.modules.LocationUtil;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -103,7 +104,7 @@ import java.util.List;
                 ),
         }
 )
-public abstract class TransformableMechanic extends SkillMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
+public abstract class TransformableMechanic extends CustomMythicMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
     protected final PlaceholderDouble xOffset;
     protected final PlaceholderDouble yOffset;
     protected final PlaceholderDouble zOffset;

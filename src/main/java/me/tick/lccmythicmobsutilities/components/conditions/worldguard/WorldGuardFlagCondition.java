@@ -1,10 +1,11 @@
-package me.tick.lccmythicmobsutilities.components.conditions;
+package me.tick.lccmythicmobsutilities.components.conditions.worldguard;
 
 import io.lumine.mythic.api.adapters.AbstractLocation;
+import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.conditions.ILocationCondition;
-import io.lumine.mythic.core.skills.SkillCondition;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.models.ComponentType;
+import me.tick.lccmythicmobsutilities.models.CustomMythicCondition;
 
 @ComponentEntry(
         type = ComponentType.CONDITION,
@@ -16,10 +17,10 @@ import me.tick.lccmythicmobsutilities.models.ComponentType;
                         - worldguardflag{flag=build}"""
         }
 )
-public class WorldGuardFlagCondition extends SkillCondition implements ILocationCondition {
+public class WorldGuardFlagCondition extends CustomMythicCondition implements ILocationCondition {
 
-    public WorldGuardFlagCondition(String line) {
-        super(line);
+    public WorldGuardFlagCondition(MythicLineConfig mlc) {
+        super(mlc);
     }
 
     @Override
