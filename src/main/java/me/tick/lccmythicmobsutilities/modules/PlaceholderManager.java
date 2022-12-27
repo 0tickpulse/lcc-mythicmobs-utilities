@@ -1,6 +1,5 @@
 package me.tick.lccmythicmobsutilities.modules;
 
-import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.skills.placeholders.Placeholder;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
@@ -40,10 +39,10 @@ public class PlaceholderManager {
     public static void registerPlaceholder(String[] names, Placeholder transformer, ComponentEntry componentEntry, boolean generateDocumentation) {
         MythicBukkit.inst().getPlaceholderManager().register(names, transformer);
         if (componentEntry == null) {
-            componentEntry = new ComponentEntryGenerator().generate();
+            componentEntry = new ComponentEntryGenerator().setName(names[0]).generate();
         }
         if (generateDocumentation) {
-            placeholderDataAnnotations.add(new ComponentEntryGenerator(componentEntry).setType(ComponentType.PLACEHOLDER).setName(names[0]).setAliases(Arrays.copyOfRange(names, 1, names.length)).generate());
+            placeholderDataAnnotations.add(new ComponentEntryGenerator(componentEntry).setType(ComponentType.PLACEHOLDER).setAliases(Arrays.copyOfRange(names, 1, names.length)).generate());
         }
     }
 
@@ -56,13 +55,13 @@ public class PlaceholderManager {
         String newName = entityType.name().toLowerCase() + "." + name;
         switch (entityType) {
             case CASTER ->
-                    registerPlaceholder(new String[]{newName}, Placeholder.meta((meta, arg) -> transformer.apply(BukkitAdapter.adapt(meta.getCaster().getEntity()), arg)), componentEntry, generateDocumentation);
+                    registerPlaceholder(new String[]{newName}, Placeholder.meta((meta, arg) -> transformer.apply(meta.getCaster().getEntity().getBukkitEntity(), arg)), componentEntry, generateDocumentation);
             case TARGET ->
-                    registerPlaceholder(new String[]{newName}, Placeholder.entity((entity, arg) -> transformer.apply(BukkitAdapter.adapt(entity), arg)), componentEntry, generateDocumentation);
+                    registerPlaceholder(new String[]{newName}, Placeholder.entity((entity, arg) -> transformer.apply(entity.getBukkitEntity(), arg)), componentEntry, generateDocumentation);
             case TRIGGER ->
-                    registerPlaceholder(new String[]{newName}, Placeholder.meta((meta, arg) -> transformer.apply(BukkitAdapter.adapt(meta.getTrigger()), arg)), componentEntry, generateDocumentation);
+                    registerPlaceholder(new String[]{newName}, Placeholder.meta((meta, arg) -> transformer.apply(meta.getTrigger().getBukkitEntity(), arg)), componentEntry, generateDocumentation);
             case PARENT ->
-                    registerPlaceholder(new String[]{newName}, Placeholder.parent((entity, arg) -> transformer.apply(BukkitAdapter.adapt(entity), arg)), componentEntry, generateDocumentation);
+                    registerPlaceholder(new String[]{newName}, Placeholder.parent((entity, arg) -> transformer.apply(entity.getBukkitEntity(), arg)), componentEntry, generateDocumentation);
         }
     }
 

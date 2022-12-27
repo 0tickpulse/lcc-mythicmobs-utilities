@@ -6,6 +6,7 @@ import com.gmail.nossr50.util.player.UserManager;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.conditions.ISkillMetaCondition;
+import io.lumine.mythic.core.skills.SkillCondition;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.models.ComponentType;
 import org.bukkit.OfflinePlayer;
@@ -24,7 +25,11 @@ import java.util.Collection;
         },
         author = "0TickPulse"
 )
-public class McMMOSamePartyCondition implements ISkillMetaCondition {
+public class McMMOSamePartyCondition extends SkillCondition implements ISkillMetaCondition {
+    public McMMOSamePartyCondition(String line) {
+        super(line);
+    }
+
     public static boolean matchesParty(OfflinePlayer player1, OfflinePlayer player2) {
         McMMOPlayer mcMMOPlayer1 = UserManager.getOfflinePlayer(player1);
         McMMOPlayer mcMMOPlayer2 = UserManager.getOfflinePlayer(player2);

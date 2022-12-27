@@ -3,6 +3,7 @@ package me.tick.lccmythicmobsutilities.events;
 import io.lumine.mythic.api.skills.conditions.ISkillCondition;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
+import me.tick.lccmythicmobsutilities.components.conditions.CanAttackCondition;
 import me.tick.lccmythicmobsutilities.components.conditions.McMMOSamePartyCondition;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import org.bukkit.event.EventHandler;
@@ -16,7 +17,9 @@ public class ConditionsEvent implements Listener {
 
     @EventHandler
     public void onConditionsLoad(MythicConditionLoadEvent event) {
-        registerCondition(new McMMOSamePartyCondition(), event);
+        conditions = new LinkedHashSet<>();
+        registerCondition(new McMMOSamePartyCondition(event.getConfig().getLine()), event);
+        registerCondition(new CanAttackCondition(event.getConfig().getLine()), event);
         //registerCondition(new WorldGuardFlagCondition(), event);
     }
 

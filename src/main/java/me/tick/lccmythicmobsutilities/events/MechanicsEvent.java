@@ -39,6 +39,7 @@ public class MechanicsEvent implements Listener {
         File file = event.getContainer().getFile();
         String line = event.getConfig().getLine();
         MythicLineConfig mlc = event.getConfig();
+        legacyMechanics = new LinkedHashSet<>();
         registerLegacyMechanic(new SlashMechanic(executor, file, line, mlc), event);
     }
 
