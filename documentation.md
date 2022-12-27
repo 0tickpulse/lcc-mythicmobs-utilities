@@ -2,12 +2,6 @@
 
 ## Conditions
 
-### Condition: `canattack`
-
-Checks if an entity can attack another entity
-
-Author:
-
 ### Condition: `sameparty`
 
 Checks if the target is in the same party as the caster. Only works for players.
@@ -21,6 +15,12 @@ Conditions:
 - sameparty
 ```
 
+### Condition: `canattack`
+
+Checks if an entity can attack another entity
+
+Author: 0TickPulse
+
 ## Mechanics
 
 ### Mechanic: `slash`
@@ -31,7 +31,7 @@ When used effectively, this mechanic can simulate a weapon's slash.
 This mechanic also provides entity targeting and allows you to specify actions performed on targeted entities through the `onhitskill` field.
 However, if you want more lenient targeting, you can use the `@EntitiesInCone` targeter provided by Mythic.
 
-Author: 0Tick
+Author: 0TickPulse
 
 #### Fields
 
@@ -148,11 +148,11 @@ Author: 0Tick
 ```yaml
 SlashTest:
   Skills:
-  - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
+    - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
 
 SlashTestTick:
   Skills:
-  - e:p{p=flame} @Origin
+    - e:p{p=flame} @Origin
 ```
 
 ## Placeholders
