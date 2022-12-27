@@ -173,6 +173,9 @@ public class SlashMechanic extends TransformableMechanic implements ITargetedLoc
         }
         Set<Entity> entities = SlashGenerator.getEntitiesInPoints(BukkitAdapter.adapt(skillMetadata.getCaster().getLocation()), new HashSet<>(locations), this.hitRadius.get(), this.verticalHitRadius.get(), this.lineDistance.get());
         for (Entity entity : entities) {
+            if (entity.equals(BukkitAdapter.adapt(skillMetadata.getCaster().getEntity()))) {
+                continue;
+            }
             SkillMetadata hitData = skillMetadata.deepClone();
             hitData.setOrigin(BukkitAdapter.adapt(entity.getLocation()));
             hitData.setEntityTarget(BukkitAdapter.adapt(entity));
