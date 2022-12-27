@@ -7,7 +7,7 @@ authors: [ 0TickPulse ]
 description: Adds certain utility things to MythicMobs, built for LcorpCity.
 depend:
   - MythicMobs
-  - McMMO
+  - mcMMO
 commands:
   lccmm:
     description: Main command for LCC MythicMobs Utilities.
