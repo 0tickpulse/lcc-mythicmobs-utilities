@@ -1,7 +1,9 @@
 package me.tick.lccmythicmobsutilities.events;
 
+import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ISkillMechanic;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
+import io.lumine.mythic.core.skills.SkillExecutor;
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
 import me.tick.lccmythicmobsutilities.components.mechanics.SlashMechanic;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
@@ -10,6 +12,7 @@ import me.tick.lccmythicmobsutilities.models.generic.generators.MechanicGenerato
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -52,7 +55,7 @@ public class MechanicsEvent implements Listener {
             LccMythicmobsUtilities.getPlugin().getLogger().info("Registering condition " + mechanic.getName() + " with names " + names);
             if (names.stream().map(String::toLowerCase).toList().contains(event.getMechanicName().toLowerCase())) {
                 try {
-                    event.register(mechanic.getConstructor(new Class[0]).newInstance(event.getContainer().getManager(), event.getContainer().getFile(), event.getConfig().getLine(), event.getConfig()));
+                    event.register(mechanic.getConstructor(new Class[]{SkillExecutor.class, File.class, String.class, MythicLineConfig.class}).newInstance(event.getContainer().getManager(), event.getContainer().getFile(), event.getConfig().getLine(), event.getConfig()));
                 } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                          InvocationTargetException e) {
                     LccMythicmobsUtilities.error(e);

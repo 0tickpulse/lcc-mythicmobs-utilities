@@ -1,5 +1,6 @@
 package me.tick.lccmythicmobsutilities.events;
 
+import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.conditions.ISkillCondition;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
@@ -39,7 +40,7 @@ public class ConditionsEvent implements Listener {
             LccMythicmobsUtilities.getPlugin().getLogger().info("Registering condition " + condition.getName() + " with names " + names);
             if (names.stream().map(String::toLowerCase).toList().contains(event.getConditionName().toLowerCase())) {
                 try {
-                    event.register(condition.getConstructor(new Class[0]).newInstance(event.getConfig()));
+                    event.register(condition.getConstructor(new Class[]{MythicLineConfig.class}).newInstance(event.getConfig()));
                 } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     LccMythicmobsUtilities.error(e);
                 }

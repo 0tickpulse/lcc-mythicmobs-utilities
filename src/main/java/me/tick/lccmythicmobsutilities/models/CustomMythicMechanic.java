@@ -7,6 +7,7 @@ import io.lumine.mythic.core.skills.SkillMechanic;
 import java.io.File;
 
 public abstract class CustomMythicMechanic extends SkillMechanic {
+
     public CustomMythicMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
     }

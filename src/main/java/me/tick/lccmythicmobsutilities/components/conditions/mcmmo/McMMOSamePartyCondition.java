@@ -13,6 +13,7 @@ import me.tick.lccmythicmobsutilities.models.CustomMythicCondition;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 @ComponentEntry(
         type = ComponentType.CONDITION,
