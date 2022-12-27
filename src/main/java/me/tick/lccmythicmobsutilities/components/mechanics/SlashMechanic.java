@@ -25,7 +25,7 @@ import java.util.Set;
 @ComponentEntry(
         type = ComponentType.MECHANIC,
         name = "slash",
-        author = "0Tick",
+        author = "0TickPulse",
         description = """
                 Performs a slash. This slash is executed by calculating points along a circle.
                 This circle is calculated by fields like `points` and `radius`.

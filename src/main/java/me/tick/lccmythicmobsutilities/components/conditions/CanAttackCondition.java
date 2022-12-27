@@ -18,7 +18,8 @@ import java.util.Map;
         type = ComponentType.CONDITION,
         name = "canattack",
         description = "Checks if an entity can attack another entity",
-        aliases = {"canattackentity", "candamage", "candamageentity"}
+        aliases = {"canattackentity", "candamage", "candamageentity"},
+        author = "0TickPulse"
 )
 public class CanAttackCondition extends SkillCondition implements IEntityComparisonCondition {
     public CanAttackCondition(String line) {
