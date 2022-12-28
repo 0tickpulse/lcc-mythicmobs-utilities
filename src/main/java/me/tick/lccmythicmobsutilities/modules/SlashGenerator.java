@@ -7,11 +7,15 @@ import java.util.*;
 
 import static java.lang.Math.*;
 
+/**
+ * A class that provides methods for slashes - arcs of a circle.
+ * @author 0TickPulse
+ */
 public class SlashGenerator {
     public static Set<Entity> getEntitiesInPoints(Location casterLocation, Set<Location> locations, double radius, double verticalRadius, double distance) {
         Set<Entity> entities = new HashSet<>();
         for (Location location : locations) {
-            Set<Location> pointsBetween = distance != 0 ? LocationUtil.getPointsBetween(location, casterLocation, distance) : new HashSet<>(Collections.singletonList(location));
+            Set<Location> pointsBetween = distance != 0 ? LocationUtilities.getPointsBetween(location, casterLocation, distance) : new HashSet<>(Collections.singletonList(location));
             for (Location point : pointsBetween) {
                 entities.addAll(point.getWorld().getNearbyEntities(point, radius, verticalRadius, radius));
             }
@@ -43,7 +47,7 @@ public class SlashGenerator {
             double horizontalOffset = relativeHorizontalOffset * cos(toRadians(rotation));
             double forwardOffset = radius * cos(toRadians(((arc / 2) - i)));
             double verticalOffset = sin(toRadians(rotation)) * relativeHorizontalOffset;
-            locations.add(LocationUtil.relativeOffset(origin, forwardOffset, horizontalOffset, verticalOffset));
+            locations.add(LocationUtilities.relativeOffset(origin, forwardOffset, horizontalOffset, verticalOffset));
             i += arc / points;
         }
 

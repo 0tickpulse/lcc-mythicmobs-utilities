@@ -6,8 +6,26 @@ import me.tick.lccmythicmobsutilities.models.ComponentType;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
+/**
+ * A generator class for {@link ComponentEntry}s, allowing users to change properties within instances much easier.
+ * To use:
+ * <ol>
+ *     <li>Create an instance of this class. You can do so by either providing no arguments - this will create an empty instance,
+ * or by providing a {@link ComponentEntry} - this will create an instance with the same properties as the provided entry.
+ *     </li>
+ *     <li>
+ *         Modify the properties of the component entry using the appropriate setter methods. These methods return the instance, allowing you to perform method chaining with them.
+ *     </li>
+ *     <li>
+ *         Once you have modified the properties to your liking, you can call {@link #generate()} to create a new {@link ComponentEntry} with the modified properties.
+ *     </li>
+ * </ol>
+ * @author 0TickPulse
+ */
 public class ComponentEntryGenerator {
     public String name;
     public ComponentType type;
@@ -30,6 +48,16 @@ public class ComponentEntryGenerator {
         this.examples = annotation.examples();
         this.fields = annotation.fields();
         this.inherit = annotation.inherit();
+    }
+
+    /**
+     * Applies a transformer function on the component entry's name and aliases.
+     * @param transformer The transformer function to apply.
+     */
+    public ComponentEntryGenerator transformNames(Function<String, String> transformer) {
+        this.name = transformer.apply(this.name);
+        this.aliases = Arrays.stream(this.aliases).map(transformer).toArray(String[]::new);
+        return this;
     }
 
     /**

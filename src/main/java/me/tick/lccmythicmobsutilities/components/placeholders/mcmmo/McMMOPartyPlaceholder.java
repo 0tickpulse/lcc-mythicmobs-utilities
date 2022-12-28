@@ -5,12 +5,12 @@ import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.util.player.UserManager;
 import me.tick.lccmythicmobsutilities.components.placeholders.Placeholders;
 import me.tick.lccmythicmobsutilities.modules.ComponentEntryGenerator;
-import me.tick.lccmythicmobsutilities.modules.PlaceholderManager;
+import me.tick.lccmythicmobsutilities.modules.PlaceholderUtilities;
 
 public class McMMOPartyPlaceholder implements Placeholders {
     @Override
     public void register() {
-        PlaceholderManager.registerAllPlayerOnlyEntityPlaceholders("mcmmo.party", (player, arg) -> {
+        PlaceholderUtilities.registerAllPlayerOnlyEntityPlaceholders("mcmmo.party", (player, arg) -> {
             McMMOPlayer mcMMOPlayer = UserManager.getOfflinePlayer(player);
             if (mcMMOPlayer == null) {
                 return "";

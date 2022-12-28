@@ -2,7 +2,7 @@ package me.tick.lccmythicmobsutilities.bridges;
 
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
 import me.tick.lccmythicmobsutilities.models.Bridge;
-import me.tick.lccmythicmobsutilities.papi.PapiMythicPlaceholder;
+import me.tick.lccmythicmobsutilities.papiexpansions.PapiMythicPlaceholder;
 
 public class PlaceholderAPIBridge implements Bridge {
     @Override

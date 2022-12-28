@@ -1,4 +1,4 @@
-package me.tick.lccmythicmobsutilities.papi;
+package me.tick.lccmythicmobsutilities.papiexpansions;
 
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.bukkit.BukkitAdapter;

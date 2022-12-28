@@ -4,7 +4,7 @@ import io.lumine.mythic.bukkit.events.MythicReloadedEvent;
 import me.tick.lccmythicmobsutilities.components.placeholders.EntityPlaceholders;
 import me.tick.lccmythicmobsutilities.components.placeholders.MetaPlaceholders;
 import me.tick.lccmythicmobsutilities.components.placeholders.Placeholders;
-import me.tick.lccmythicmobsutilities.modules.PlaceholderManager;
+import me.tick.lccmythicmobsutilities.modules.PlaceholderUtilities;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -25,7 +25,7 @@ public class PlaceholderRegisterer implements Listener {
     }
 
     public static void register() {
-        PlaceholderManager.placeholderDataAnnotations = new LinkedHashSet<>();
+        PlaceholderUtilities.placeholderDataAnnotations = new LinkedHashSet<>();
         for (Placeholders placeholder : placeholders) {
             placeholder.register();
         }

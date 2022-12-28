@@ -2,13 +2,14 @@ package me.tick.lccmythicmobsutilities;
 
 import me.tick.lccmythicmobsutilities.bridges.McMMOBridge;
 import me.tick.lccmythicmobsutilities.bridges.PlaceholderAPIBridge;
+import me.tick.lccmythicmobsutilities.bridges.WorldGuardBridge;
 import me.tick.lccmythicmobsutilities.commands.LccmmCommand;
 import me.tick.lccmythicmobsutilities.events.ConditionsEvent;
 import me.tick.lccmythicmobsutilities.events.MechanicsEvent;
 import me.tick.lccmythicmobsutilities.events.PlaceholderRegisterer;
 import me.tick.lccmythicmobsutilities.models.Bridge;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
-import me.tick.lccmythicmobsutilities.modules.PlaceholderManager;
+import me.tick.lccmythicmobsutilities.modules.PlaceholderUtilities;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -70,7 +71,7 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
     public static Set<ComponentEntry> getComponentAnnotations() {
         Set<ComponentEntry> entries = ConditionsEvent.conditions.stream().map(clazz -> clazz.getAnnotation(ComponentEntry.class)).collect(Collectors.toSet());
         entries.addAll(MechanicsEvent.legacyMechanics.stream().map(clazz -> clazz.getAnnotation(ComponentEntry.class)).collect(Collectors.toSet()));
-        entries.addAll(PlaceholderManager.placeholderDataAnnotations);
+        entries.addAll(PlaceholderUtilities.placeholderDataAnnotations);
         return entries;
     }
 
@@ -114,7 +115,8 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
     public void registerBridges() {
         registerBridges(
                 new McMMOBridge(),
-                new PlaceholderAPIBridge()
+                new PlaceholderAPIBridge(),
+                new WorldGuardBridge()
         );
     }
 

@@ -10,7 +10,8 @@ depend:
 softdepend:
   - mcMMO
   - PlaceholderAPI
-
+  - WorldGuard
+  - WorldEdit
 commands:
   lccmm:
     description: Main command for LCC MythicMobs Utilities.

@@ -15,7 +15,7 @@ import io.lumine.mythic.core.utils.annotations.MythicField;
 import me.tick.lccmythicmobsutilities.models.ComponentEntry;
 import me.tick.lccmythicmobsutilities.models.ComponentType;
 import me.tick.lccmythicmobsutilities.models.CustomMythicMechanic;
-import me.tick.lccmythicmobsutilities.modules.LocationUtil;
+import me.tick.lccmythicmobsutilities.modules.LocationUtilities;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -41,7 +41,7 @@ import java.util.List;
  * </ol>
  *
  * @author 0TickPulse
- * @see LocationUtil
+ * @see LocationUtilities
  * @see SkillMechanic
  */
 @ComponentEntry(
@@ -144,7 +144,7 @@ public abstract class TransformableMechanic extends CustomMythicMechanic impleme
             // add offsets
             location.add(xOffset.get(), yOffset.get(), zOffset.get());
             // add relative offsets
-            location = LocationUtil.relativeOffset(
+            location = LocationUtilities.relativeOffset(
                     location.clone().setDirection(
                             casterLocation.getDirection()
                     ),

@@ -3,7 +3,7 @@ package me.tick.lccmythicmobsutilities.components.placeholders;
 import io.lumine.mythic.core.skills.placeholders.Placeholder;
 import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
 import me.tick.lccmythicmobsutilities.modules.ComponentEntryGenerator;
-import me.tick.lccmythicmobsutilities.modules.PlaceholderManager;
+import me.tick.lccmythicmobsutilities.modules.PlaceholderUtilities;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
@@ -12,10 +12,10 @@ import org.apache.commons.jexl3.MapContext;
 public class MetaPlaceholders implements Placeholders {
     @Override
     public void register() {
-        PlaceholderManager.registerPlaceholder(new String[]{"jexl"}, Placeholder.meta((skillMetadata, arg) -> {
+        PlaceholderUtilities.registerPlaceholder(new String[]{"jexl"}, Placeholder.meta((meta, arg) -> {
             JexlEngine jexl = new JexlBuilder().create();
             JexlContext context = new MapContext();
-            context.set("skillMetadata", skillMetadata);
+            context.set("meta", meta);
             try {
                 return jexl.createExpression(arg).evaluate(context).toString();
             } catch (Exception e) {
@@ -25,7 +25,7 @@ public class MetaPlaceholders implements Placeholders {
             }
         }), new ComponentEntryGenerator()
                 .setName("jexl.<expression>")
-                .setDescription("Parses a [JEXL](https://commons.apache.org/proper/commons-jexl/) expression and returns the result.")
+                .setDescription("Parses a [JEXL](https://commons.apache.org/proper/commons-jexl/) expression and returns the result. Use \"meta\" to access the meta object.")
                 .setAuthor("0TickPulse")
                 .generate());
     }

@@ -26,7 +26,7 @@ Author: 0TickPulse
 
 ```yaml
 Conditions:
-  - sameparty
+- sameparty
 ```
 
 ## Mechanics
@@ -156,20 +156,14 @@ Author: 0TickPulse
 ```yaml
 SlashTest:
   Skills:
-    - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
+  - slash{onpointskill=SlashTestTick;points=80;r=5;rot=<random.1to180>} @forward{f=0;uel=true}
 
 SlashTestTick:
   Skills:
-    - e:p{p=flame} @Origin
+  - e:p{p=flame} @Origin
 ```
 
 ## Placeholders
-
-### Placeholder: `[caster|target|trigger|parent].standing_on`
-
-Returns the block type that the entity is standing on.
-
-Author: 0TickPulse
 
 ### Placeholder: `[caster|target|trigger|parent].mcmmo.party`
 
@@ -177,9 +171,27 @@ Returns the McMMO party of the entity. If the entity is not in a party or is not
 
 Author: 0TickPulse
 
+### Placeholder: `[caster|target|trigger|parent].standing_on`
+
+Returns the block type that the entity is standing on.
+
+Author: 0TickPulse
+
+### Placeholder: `[caster|target|trigger|parent].worldguard_flag.<flag>`
+
+Returns the value of the specified WorldGuard flag at the entity's location.
+
+Author: 0TickPulse
+
 ### Placeholder: `jexl.<expression>`
 
-Parses a [JEXL](https://commons.apache.org/proper/commons-jexl/) expression and returns the result.
+Parses a [JEXL](https://commons.apache.org/proper/commons-jexl/) expression and returns the result. Use "meta" to access the meta object.
+
+Author: 0TickPulse
+
+### Placeholder: `target.worldguard_flag.<flag>`
+
+Returns the value of the specified WorldGuard flag at the target location.
 
 Author: 0TickPulse
 
@@ -188,3 +200,4 @@ Author: 0TickPulse
 ### PAPI Placeholder
 
 You can use `%mythic_<expression>%` to parse a MythicMobs expression. The expression can be any valid MythicMobs expression, including variables, placeholders, etc. To get the player, you use `target`. For example, `<target.var.a>` returns the player's `a` variable.
+

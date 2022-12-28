@@ -5,7 +5,11 @@ import org.bukkit.util.Vector;
 
 import java.util.Set;
 
-public class LocationUtil {
+/**
+ * A set of utilities for working with locations.
+ * @author 0TickPulse
+ */
+public class LocationUtilities {
     public record RelativeOffsets(double forward, double right, double up) {
     }
 
