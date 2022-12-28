@@ -102,6 +102,12 @@ import java.util.List;
                         description = "Whether to use radians instead of degrees for the rotation.",
                         defValue = "false"
                 ),
+                @MythicField(
+                        name = "inferdirection",
+                        aliases = {"inferdir", "id"},
+                        description = "If set to true, instead of getting the direction from the target location, it gets the direction of an arbitrary vector from the caster to the target location.",
+                        defValue = "false"
+                )
         }
 )
 public abstract class TransformableMechanic extends CustomMythicMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
@@ -114,6 +120,7 @@ public abstract class TransformableMechanic extends CustomMythicMechanic impleme
     protected final PlaceholderDouble scale;
     protected final PlaceholderDouble rotation;
     protected final boolean radians;
+    protected final boolean inferDirection;
 
     public TransformableMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -126,6 +133,7 @@ public abstract class TransformableMechanic extends CustomMythicMechanic impleme
         this.scale = mlc.getPlaceholderDouble(new String[]{"scale", "s"}, 1);
         this.rotation = mlc.getPlaceholderDouble(new String[]{"rotation", "rot"}, 0);
         this.radians = mlc.getBoolean(new String[]{"radians", "rad", "useradians", "ur"}, false);
+        this.inferDirection = mlc.getBoolean(new String[]{"inferdirection", "inferdir", "id"}, false);
     }
 
     public double toRadians(double angle) {
@@ -158,7 +166,11 @@ public abstract class TransformableMechanic extends CustomMythicMechanic impleme
             location = casterLocation.clone().add(casterToTarget);
             // size transformation
             Vector vector = location.clone().subtract(center).toVector();
-            return center.clone().add(vector.multiply(scale.get()));
+            Location finalLocation = center.clone().add(vector.multiply(scale.get()));
+            if (inferDirection) {
+                finalLocation.setDirection(casterToTarget);
+            }
+            return finalLocation;
         }).toList();
     }
 

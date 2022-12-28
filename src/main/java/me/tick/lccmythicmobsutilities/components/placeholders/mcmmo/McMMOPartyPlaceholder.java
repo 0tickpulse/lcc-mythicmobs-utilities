@@ -10,7 +10,7 @@ import me.tick.lccmythicmobsutilities.modules.PlaceholderUtilities;
 public class McMMOPartyPlaceholder implements Placeholders {
     @Override
     public void register() {
-        PlaceholderUtilities.registerAllPlayerOnlyEntityPlaceholders("mcmmo.party", (player, arg) -> {
+        PlaceholderUtilities.registerAllPlayerOnlyEntityPlaceholders(new String[]{"mcmmo.party"}, (player, arg) -> {
             McMMOPlayer mcMMOPlayer = UserManager.getOfflinePlayer(player);
             if (mcMMOPlayer == null) {
                 return "";

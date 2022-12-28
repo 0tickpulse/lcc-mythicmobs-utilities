@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public final class LccMythicmobsUtilities extends JavaPlugin {
 
-    static final boolean debug = true;
+    public static boolean debug = true;
 
     public static LccMythicmobsUtilities getPlugin() {
         return getPlugin(LccMythicmobsUtilities.class);

@@ -29,7 +29,11 @@ import java.util.function.Function;
  */
 public class PlaceholderUtilities {
 
-    private static BiFunction<Entity, String, String> transformFunction(BiFunction<Player, String, String> function, String fallback) {
+    private static String formatChoices(String[] choices) {
+        return "[" + Arrays.stream(choices).reduce((a, b) -> a + "|" + b).orElse("") + "]";
+    }
+
+    private static BiFunction<Entity, String, String> playerFunctionToEntityFunction(BiFunction<Player, String, String> function, String fallback) {
         return (entity, s) -> {
             if (entity.getType().equals(EntityType.PLAYER)) {
                 return function.apply((Player) entity, s);
@@ -47,6 +51,9 @@ public class PlaceholderUtilities {
         registerPlaceholder(names, transformer, componentEntry, true);
     }
 
+    /**
+     * @see #registerLocationPlaceholder(String[], BiFunction, ComponentEntry, boolean)
+     */
     public static void registerLocationPlaceholder(String[] names, BiFunction<Location, String, String> transformer, ComponentEntry componentEntry) {
         registerLocationPlaceholder(names, transformer, componentEntry, true);
     }
@@ -87,13 +94,25 @@ public class PlaceholderUtilities {
         LccMythicmobsUtilities.devLog("Registering placeholder" + (generateDocumentation ? " and documentation" : "") + ": " + names[0]);
     }
 
-    public static void registerEntityPlaceholder(PlaceholderEntityType entityType, String name, BiFunction<Entity, String, String> transformer, ComponentEntry componentEntry) {
-        registerEntityPlaceholder(entityType, name, transformer, componentEntry, true);
+    /**
+     * @see #registerEntityPlaceholder(PlaceholderEntityType, String[], BiFunction, ComponentEntry, boolean) 
+     */
+    public static void registerEntityPlaceholder(PlaceholderEntityType entityType, String[] names, BiFunction<Entity, String, String> transformer, ComponentEntry componentEntry) {
+        registerEntityPlaceholder(entityType, names, transformer, componentEntry, true);
     }
 
 
-    public static void registerEntityPlaceholder(PlaceholderEntityType entityType, String name, BiFunction<Entity, String, String> transformer, ComponentEntry componentEntry, boolean generateDocumentation) {
-        String newName = entityType.name().toLowerCase() + "." + name;
+    /**
+     * Registers a placeholder for entities. This uses the {@link PlaceholderEntityType enum} to automatically add the correct prefix to the placeholder name.
+     *
+     * @param entityType            The entity type to register the placeholder for.
+     * @param names                 The names of the placeholder.
+     * @param transformer           The transformer function. This is a function with two args - the targeted entity and the argument passed to the placeholder.
+     * @param componentEntry        The component entry for the placeholder. This will be used to generate documentation.
+     * @param generateDocumentation Whether to generate documentation for this placeholder. If set to false, the {@code componentEntry} param will be ignored.
+     */
+    public static void registerEntityPlaceholder(PlaceholderEntityType entityType, String[] names, BiFunction<Entity, String, String> transformer, ComponentEntry componentEntry, boolean generateDocumentation) {
+        String newName = entityType.name().toLowerCase() + "." + names;
         switch (entityType) {
             case CASTER ->
                     registerPlaceholder(new String[]{newName}, Placeholder.meta((meta, arg) -> transformer.apply(meta.getCaster().getEntity().getBukkitEntity(), arg)), componentEntry, generateDocumentation);
@@ -106,28 +125,28 @@ public class PlaceholderUtilities {
         }
     }
 
-    public static void registerPlayerOnlyEntityPlaceholder(PlaceholderEntityType entityType, String name, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry) {
-        registerPlayerOnlyEntityPlaceholder(entityType, name, transformer, componentEntry, "");
+    public static void registerPlayerOnlyEntityPlaceholder(PlaceholderEntityType entityType, String[] names, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry) {
+        registerPlayerOnlyEntityPlaceholder(entityType, names, transformer, componentEntry, "");
     }
 
-    public static void registerPlayerOnlyEntityPlaceholder(PlaceholderEntityType entityType, String name, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry, String fallback) {
-        registerEntityPlaceholder(entityType, name, transformFunction(transformer, fallback), componentEntry);
+    public static void registerPlayerOnlyEntityPlaceholder(PlaceholderEntityType entityType, String[] names, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry, String fallback) {
+        registerEntityPlaceholder(entityType, names, playerFunctionToEntityFunction(transformer, fallback), componentEntry);
     }
 
-    public static void registerAllEntityPlaceholders(String name, BiFunction<Entity, String, String> transformer, ComponentEntry componentEntry) {
+    public static void registerAllEntityPlaceholders(String[] names, BiFunction<Entity, String, String> transformer, ComponentEntry componentEntry) {
         for (PlaceholderEntityType entityType : PlaceholderEntityType.values()) {
-            registerEntityPlaceholder(entityType, name, transformer, null, false);
+            registerEntityPlaceholder(entityType, names, transformer, null, false);
         }
-        String typesString = "[" + Arrays.stream(PlaceholderEntityType.values()).map(type -> type.name().toLowerCase()).reduce((a, b) -> a + "|" + b).orElse("") + "].";
+        String typesString = formatChoices(Arrays.stream(PlaceholderEntityType.values()).map(Enum::name).toArray(String[]::new)) + ".";
         placeholderDataAnnotations.add(new ComponentEntryGenerator(componentEntry).transformNames((string) -> typesString + string).generate());
     }
 
-    public static void registerAllPlayerOnlyEntityPlaceholders(String name, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry) {
-        registerAllPlayerOnlyEntityPlaceholders(name, transformer, componentEntry, "");
+    public static void registerAllPlayerOnlyEntityPlaceholders(String[] names, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry) {
+        registerAllPlayerOnlyEntityPlaceholders(names, transformer, componentEntry, "");
     }
 
-    public static void registerAllPlayerOnlyEntityPlaceholders(String name, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry, String fallback) {
-        registerAllEntityPlaceholders(name, transformFunction(transformer, fallback), componentEntry);
+    public static void registerAllPlayerOnlyEntityPlaceholders(String[] names, BiFunction<Player, String, String> transformer, ComponentEntry componentEntry, String fallback) {
+        registerAllEntityPlaceholders(names, playerFunctionToEntityFunction(transformer, fallback), componentEntry);
     }
 
     public static void registerVariableScopePlaceholder(VariableScope scope, String name, Placeholder transformer, ComponentEntry componentEntry) {

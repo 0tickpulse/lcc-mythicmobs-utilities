@@ -1,6 +1,7 @@
 package me.tick.lccmythicmobsutilities.commands;
 
 import me.tick.lccmythicmobsutilities.DocumentationGenerator;
+import me.tick.lccmythicmobsutilities.LccMythicmobsUtilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class LccmmCommand implements CommandExecutor, TabCompleter {
 
-    public static String usage = "Usage: /lccmm <generateDocs>";
+    public static String usage = "Usage: /lccmm [generateDocs/debug]";
 
     @Override
     public boolean onCommand(
@@ -25,8 +26,8 @@ public class LccmmCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(usage);
             return true;
         }
-        switch (args[0]) {
-            case "generateDocs" -> {
+        switch (args[0].toLowerCase()) {
+            case "generatedocs" -> {
                 sender.sendMessage("Generating docs...");
                 try {
                     DocumentationGenerator.writeToFile();
@@ -35,6 +36,10 @@ public class LccmmCommand implements CommandExecutor, TabCompleter {
                     e.printStackTrace();
                 }
                 sender.sendMessage("Done!");
+            }
+            case "debug" -> {
+                LccMythicmobsUtilities.debug = !LccMythicmobsUtilities.debug;
+                sender.sendMessage("Debug mode is now " + (LccMythicmobsUtilities.debug ? "enabled" : "disabled"));
             }
             default -> sender.sendMessage("Unknown arg " + args[0] + "!" + System.lineSeparator() + usage);
         }

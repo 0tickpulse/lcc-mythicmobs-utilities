@@ -15,7 +15,7 @@ public class WorldGuardFlagPlaceholder implements Placeholders {
                 .setDescription("Returns the value of the specified WorldGuard flag at the target location.")
                 .setAuthor("0TickPulse")
                 .generate());
-        PlaceholderUtilities.registerAllEntityPlaceholders("worldguard_flag", (entity, arg) -> {
+        PlaceholderUtilities.registerAllEntityPlaceholders(new String[]{"worldguard_flag"}, (entity, arg) -> {
             return WorldGuardBridge.getFlagValueString(entity.getLocation(), WorldGuardBridge.getFlag(arg));
         }, new ComponentEntryGenerator()
                 .setName("worldguard_flag.<flag>")

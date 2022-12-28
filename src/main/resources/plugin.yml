@@ -15,5 +15,5 @@ softdepend:
 commands:
   lccmm:
     description: Main command for LCC MythicMobs Utilities.
-    usage: /lccmm <generateDataAnnotation>
+    usage: /lccmm [generateDocs/debug]
     aliases: [ lccmythicmobs, lccmythicmobsutilities, lccmythicmobsutil, lccmmu, lccmmutil ]

@@ -6,7 +6,7 @@ import me.tick.lccmythicmobsutilities.modules.PlaceholderUtilities;
 public class EntityPlaceholders implements Placeholders {
     @Override
     public void register() {
-        PlaceholderUtilities.registerAllEntityPlaceholders("standing_on", (entity, arg) -> {
+        PlaceholderUtilities.registerAllEntityPlaceholders(new String[]{"standing_on"}, (entity, arg) -> {
             return entity.getLocation().add(0, -1, 0).getBlock().getType().name();
         }, new ComponentEntryGenerator()
                 .setName("standing_on")
