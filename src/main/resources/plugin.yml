@@ -9,6 +9,8 @@ depend:
   - MythicMobs
 softdepend:
   - mcMMO
+  - PlaceholderAPI
+
 commands:
   lccmm:
     description: Main command for LCC MythicMobs Utilities.

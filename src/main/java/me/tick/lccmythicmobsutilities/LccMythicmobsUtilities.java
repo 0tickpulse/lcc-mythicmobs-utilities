@@ -1,6 +1,7 @@
 package me.tick.lccmythicmobsutilities;
 
 import me.tick.lccmythicmobsutilities.bridges.McMMOBridge;
+import me.tick.lccmythicmobsutilities.bridges.PlaceholderAPIBridge;
 import me.tick.lccmythicmobsutilities.commands.LccmmCommand;
 import me.tick.lccmythicmobsutilities.events.ConditionsEvent;
 import me.tick.lccmythicmobsutilities.events.MechanicsEvent;
@@ -30,6 +31,18 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
         if (debug) {
             getPlugin().getLogger().log(Level.INFO, message);
         }
+    }
+
+    public static String getVersion() {
+        return getPlugin().getDescription().getVersion();
+    }
+
+    public static void info(String message) {
+        log(Level.INFO, message);
+    }
+
+    public static void log(Level level, String message) {
+        getPlugin().getLogger().log(level, message);
     }
 
     public static void error(Throwable message) {
@@ -99,12 +112,22 @@ public final class LccMythicmobsUtilities extends JavaPlugin {
     }
 
     public void registerBridges() {
-        registerBridge(new McMMOBridge());
+        registerBridges(
+                new McMMOBridge(),
+                new PlaceholderAPIBridge()
+        );
+    }
+
+    public void registerBridges(Bridge... bridges) {
+        for (Bridge bridge : bridges) {
+            registerBridge(bridge);
+        }
     }
 
     public void registerBridge(Bridge bridge) {
         if (bridge.canEnable()) {
             bridge.start();
+            info("Bridge " + bridge.getClass().getSimpleName() + " has been enabled!");
         }
     }
 
